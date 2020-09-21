@@ -43,11 +43,11 @@ function reduceRight(originalArray, callback, initialValue) {
     }
 
   for (var i = startingIndex; i >= 0; i--) {
-  if (i in originalArray) {
-  resultSoFar = callback(resultSoFar, originalArray[i], i, originalArray);
-  }
-  }
-  return resultSoFar;
+    if (i in originalArray) {
+      resultSoFar = callback(resultSoFar, originalArray[i], i, originalArray);
+      }
+    }
+    return resultSoFar;
   }
 
 
