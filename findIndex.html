@@ -1,0 +1,137 @@
+<script src="../simpletest.js"></script>
+<script>
+//Prototype Implementation:
+// function findIndex(array, callback, optionalThis) {
+  //   for (var i = 0; i < array.length; i++) {
+  //     resultSoFar = callback (array[i]);
+  //   }
+  //   return resultSoFar
+  // }
+
+//Function signature:
+  //.findIndex(array, callback( element[, index[, array]] )[, thisArg])
+
+//Callback parameters:
+  //element
+  //index
+  //array
+  
+
+//Return Value: 
+  //The index of the first element in the array that passes the test. 
+  // Otherwise, -1
+
+//Description: 
+  //The findIndex() method executes the callback function once for every index in the array until it finds the one where callback returns a truthy value.
+
+
+function findIndex(originalArray, callback, optionalThis){
+  var arrayLength = originalArray.length;
+  var findIndexCallback = callback;
+
+  if (optionalThis) {
+    findIndexCallback = callback.bind(optionalThis);
+  }
+
+  if (arrayLength === 0) {
+    return -1;
+  }
+
+  for (var i = 0; i < arrayLength; i++) {
+    if (findIndexCallback(originalArray[i], i, originalArray) === true){
+      return originalArray[i];
+    };
+  }
+  return - 1;
+}
+
+
+tests({
+
+'It should run array.length times': function() {
+  var numberOfTimesCallbackHasRun = 0;
+  findIndex([1], function() {
+  numberOfTimesCallbackHasRun++;
+  });
+  eq(numberOfTimesCallbackHasRun, 1);
+},
+'It should pass in the ith element as the first argument to the callback': function () {
+  findIndex([1], function(number) {
+    eq(number, 1);
+  }); 
+},
+'It should pass in the ith position as the second argument to the callback': function () {
+  findIndex([1], function(number, index) {
+    eq(index, 0);
+  });
+  
+},
+'It should pass in the original Array as the third argument to the callback': function () {
+  var testArray = [1,2,3];
+  findIndex(testArray, function(number, index, originalArray) {
+    eq(originalArray, testArray);
+  });
+},
+'It should accept an optional this object': function () {
+  findIndex([1], function () {
+  eq(this.doughnut, 'strawberry jelly.');
+  }, {doughnut: 'strawberry jelly.'});
+},
+'It should be undefined if no optional this object': function () {
+  findIndex([1], function () {
+  eq(this.doughnut, undefined);
+  },);
+},
+
+'If truthy value, then it should return the index': function () {
+  var findResult = findIndex([1,2,3], function (element) {
+    return element > 2
+  });
+  eq(findResult, 3);
+},
+
+'If falsey value, then it should return -1': function () {
+  var findResult = findIndex([1,2,3], function (element) {
+    return element > 3
+  });
+  eq(findResult, -1);
+},
+
+'It should return -1 if array length is 0': function () {
+ var findResult = findIndex([], function (element) {
+   return element > 3;
+ });
+ eq(findResult, -1);
+},
+'It should not allow callback to visit any elements added to the array after the call to find begins': function () {
+  var originalArray = [1];
+  numberOfTimesCallbackHasRun = 0;
+
+  findIndex(originalArray, function () {
+    originalArray.push('add me');
+    numberOfTimesCallbackHasRun++;
+  });
+  eq(numberOfTimesCallbackHasRun, 1);
+},
+
+'It should pass in current element value to callback': function () {
+  var findResult = findIndex([1,2], function (element,index,originalArray) {
+    originalArray[1] = 3;
+    return element > 2
+  });
+  eq(findResult, 3);
+},
+
+'It should still run callback on deleted elements': function () {
+  var originalArray = [1,2];
+  var numberOfTimesCallbackHasRun = 0;
+
+  findIndex(originalArray, function () {
+    originalArray.splice(0, 1);
+    numberOfTimesCallbackHasRun++
+  });
+  eq(numberOfTimesCallbackHasRun, 2);
+}
+})
+
+</script>
