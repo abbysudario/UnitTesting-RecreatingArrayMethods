@@ -1,0 +1,106 @@
+<script src="../simpletest.js"></script>
+<script>
+
+//Prototype Implementation:
+ // function concat(array, callback, optionalThis) {
+  //   for (var i = 0; i < array.length; i++) {
+  //     resultSoFar = callback (array[i]);
+  //   }
+  //   return resultSoFar
+  // }
+
+//Function signature:
+  //const new_array = old_array.concat([value1[, value2[, ...[, valueN]]]])
+
+//Callback parameters:
+  //value N
+
+//Return Value: 
+  //A new Array instance.
+
+//Description: 
+//The concat method creates a new array consisting of the elements in the object on which it is called, followed in order by, for each argument, the elements of that argument (if the argument is an array) or the argument itself (if the argument is not an array). It does not recurse into nested array arguments.
+
+function concat(array) {
+  var concatArray = [];
+  for(i = 0; i < arguments.length; i++) {
+      if(Array.isArray(arguments[i])) {
+        for(j = 0; j < arguments[i].length; j++) {
+          concatArray.push(arguments[i][j])
+        }
+      } else {
+        concatArray.push(arguments[i])
+      }
+    }
+  return concatArray;
+}
+
+
+tests({
+
+'It should return an array.': function() {
+    var originalArray = concat([]);
+    eq(Array.isArray(originalArray), true);
+},
+'It should create a new array, not the array provided as argument.': function() {
+    var originalArray = [1];
+    var newArray = concat(originalArray);
+    eq(newArray !== originalArray, true);
+},
+'If an argument is an array, the new array should consist of the elements in the argument on which it was called.': function() {
+    var array1 = [1];
+    var array2 = [2];
+    var newArray = concat(array1, array2);
+    eq(newArray != array1, true);
+    eq(newArray != array2, true);
+},
+'If an argument is an array, it should add each element from old array to new array.': function() {
+    var originalArray = [1, 2];
+    var newArray = concat(originalArray);
+    eq(newArray[0], 1);
+    eq(newArray[1], 2);
+},
+'If the argument is not an array, it should consist of the argument itself and push that element onto the new array.': function() {
+    var newArray = concat('hello', 168);
+    eq(newArray[0], 'hello');
+    eq(newArray[1], 168);
+},
+'It should pass in optional value(N) as further arguments.': function() {
+    var originalArray = [1];
+    var newValue = ['decaf espresso'];
+    concat(originalArray, newValue);
+    eq(newValue, 'decaf espresso');
+},
+'If an object reference is modified, the changes should be visible to the new array.': function() {
+    var daysOfTheWeek = {tuesday: 'taco tuesday'};
+    var newArray = concat(daysOfTheWeek);
+    daysOfTheWeek.tuesday = 'tempura tuesday';
+    eq(newArray[0].tuesday, 'tempura tuesday');
+    eq(daysOfTheWeek.tuesday, 'tempura tuesday');
+},
+'It should take multiple arguments.': function() {
+    var array1 = [1];
+    var array2 = [3, 4];
+    var result = concat(array1, 2, array2);
+    eq(result.join(','), '1,2,3,4')
+},
+'The elements in the new array should follow the order in which they appear in the arguments.': function() {
+    var newArray = concat(1, 2, 3);
+    eq(newArray[0], 1);
+    eq(newArray[1], 2);
+    eq(newArray[2], 3);
+},
+'It should not alter any of the original arrays provided as arguments.': function() {
+    var originalArray = [1, 2];
+    var newArray = concat(originalArray);
+    newArray[0] = 5;
+    eq(originalArray[0], 1);
+},
+'It should actually concatenate.': function() {
+    var result = concat([1], 'wat', 'man', 555, true);
+    eq(result.join(','), '1,wat,man,555,true')
+}
+
+})
+
+</script>
