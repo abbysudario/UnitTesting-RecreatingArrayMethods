@@ -42,7 +42,7 @@ tests({
     var originalArray = concat([]);
     eq(Array.isArray(originalArray), true);
 },
-'It should create a new array, not the array provided as argument.': function() {
+'It should return a new array.': function() {
     var originalArray = [1];
     var newArray = concat(originalArray);
     eq(newArray !== originalArray, true);
@@ -65,7 +65,7 @@ tests({
     eq(newArray[0], 'hello');
     eq(newArray[1], 168);
 },
-'It should pass in optional value(N) as further arguments.': function() {
+'It should pass in optional value(N).': function() {
     var originalArray = [1];
     var newValue = ['decaf espresso'];
     concat(originalArray, newValue);
