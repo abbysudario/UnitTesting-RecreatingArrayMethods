@@ -1,11 +1,4 @@
-<!-- function filterRec (array, element) {
-    for (var i = 0; i < array.length; i++){
-      return array[i] === element;
-    }
-  
-  } -->
-  
-  <script src="../simpletest.js"></script>
+<script src="../simpletest.js"></script>
 <script>
 // Prototype Implementation:
   // function find(array, callback, optionalThis) {
@@ -25,12 +18,17 @@
   //index
   //array
 
+//Return Value: 
+  //The value of the first element in the array that satisfies the provided testing function.
+  //Otherwise, undefined 
+
 
 
 function find(array, callback, optionalThis) {
     const arrayLength = array.length;
     let findCallback = callback;
 
+    //if optionalThis Argument is present
     if (optionalThis) {
         findCallback = callback.bind(optionalThis);
     }

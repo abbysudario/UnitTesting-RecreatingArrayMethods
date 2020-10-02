@@ -1,59 +1,44 @@
 <script src="../simpletest.js"></script>
 <script>
 
+//Prototype Implementation:
+ // function every(array, callback, optionalThis) {
+  //   for (var i = 0; i < array.length; i++) {
+  //     resultSoFar = callback (array[i]);
+  //   }
+  //   return resultSoFar
+  // }
+
+//Function signature:
+  //filter(callback(element[, index, [array]])[, thisArg])
+
+//Callback parameters:
+    //element
+    //index is optional
+    //array is optional
+
+  
+
+//Return Value: 
+  //A new array with the elements that pass the test.
+  //If no elements pass the test, an empty array will be returned.
 
 
-//Example 1:
-//filter([1,2,3], function () {
-
-//});
-
-// Example 2: 
-// filter([1,2,3], function (number) {
-//     console.log(number);
-// });
-
-// Example 3: 
-// filter([1,2,3], function (number, index) {
-//     console.log(index);
-// });
-
-// Example 4: 
-// filter([1,2,3], function (number, index, originalArray) {
-//     console.log(originalArray);
-// });
-
-// Example 5: 
-// filter([1, 2, 3], function(number, index, originalArray) { 
-//   console.log(originalArray);
-// });
-
-// Example 6:
-//var testArray = [1,2,3];
-//var filteredArray = filter(testArray, function () {});
-//testArray !== filteredArray
-
-// Example 7: 
-//var testArray = [1,2,3];
-//var filteredArray = filter(testArray, function (element) {
-//    return element > 1
-//});
-//Expect filteredArray to be [2,3]
-
-
-function filter (originalArray, callback, optionalThis) {
-    var filterCallback = callback;
-
+function filter (array, callback, optionalThis) {
+    const arrayLength = array.length;
+    let filterCallback = callback;
+    
+    //if optionalThis Argument is present
     if (optionalThis) {
         filterCallback = callback.bind(optionalThis);
     }
 
-    var filteredArray = [];
+    let filteredArray = [];
 
-    for (var i = 0; i < originalArray.length; i++) {
-        if(filterCallback(originalArray[i], i, originalArray)) {
-            filteredArray.push(originalArray[i]);
-        };
+    for (var i = 0; i < arrayLength; i++) {
+        if(filterCallback(array[i], i, array)) {
+            filteredArray.push(array[i]);
+        }
     }
 
     return filteredArray;
@@ -61,14 +46,13 @@ function filter (originalArray, callback, optionalThis) {
 
 tests ({
     'It should run the callback function array.length times': function () {
-        var numberOfTimesCallbackHasRun = 0;
+        let numberOfTimesCallbackHasRun = 0;
         filter([1,2,3], function () {
             numberOfTimesCallbackHasRun++;
         });
         eq(numberOfTimesCallbackHasRun, 3);
     },
     'It should pass in the ith element as the first argument to the callback': function () {
-
         filter([1], function (number) {
         eq(number, 1);
         });
@@ -79,7 +63,7 @@ tests ({
         });
     },
     'It should pass in the original Array as the third argument to the callback': function () {
-        var testArray = [1,2,3];
+        const testArray = [1,2,3];
         filter(testArray, function (number, index, originalArray) {
         eq(originalArray, testArray);
         });
@@ -92,18 +76,18 @@ tests ({
     },
 
     'It should return an array': function () {
-        var filteredArray = filter([], function () {});
+        const filteredArray = filter([], function () {});
         eq(Array.isArray(filteredArray), true);
         },
 
     'It should return a new array, not the array being filtered': function () {
-        var arrayBeingFiltered = [];
-        var filteredArray = filter(arrayBeingFiltered, function () {});
+        let arrayBeingFiltered = [];
+        const filteredArray = filter(arrayBeingFiltered, function () {});
         eq(filteredArray !== arrayBeingFiltered, true);
         
     },
     'It should return a new array that only has elements where callback returns true': function () {
-        var filteredArray = filter([1,2], function (number) {
+        const filteredArray = filter([1,2], function (number) {
             return number > 1;
         });
         eq(filteredArray.length, 1);
