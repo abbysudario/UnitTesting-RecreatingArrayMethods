@@ -1,36 +1,37 @@
 <script src="../simpletest.js"></script>
 <script>
 
+//Prototype Implementation:
+    // function forEach(array, callback, optionalThis) {
+    //     for (var i = 0; i < array.length; i++) {
+    //         return result[i];
+    //     };
+    // }
+
+//Function signature:
+    //forEach(callback(currentValue [, index [, array]])[, thisArg])
+
+//Callback parameters:
+    //currentValue
+    //index is optional
+    //array is optional
+  
+//Return Value: 
+    //undefined
+
+//Description:
+    //forEach() calls a provided callback function once for each element in an array in ascending order. It is not invoked for index properties that have been deleted or are uninitialized.
 
 
-//Example 1:
-//forEach([1,2,3], function () {
-//console.log('hi');
-//});
+function forEach (array, callback, optionalThis) {
+    const length = array.length;
+    let forEachCallback = callback;
 
-// Example 2: 
-// forEach([1,2,3], function (number) {
-//     console.log(number);
-// });
-
-// Example 3: 
-// forEach([1,2,3], function (number, index) {
-//     console.log(index);
-// });
-
-// Example 4: 
-// forEach([1,2,3], function (number, index, originalArray) {
-//     console.log(originalArray);
-// });
-
-
-function forEach (array, callback, optionalThisObject) {
-    var forEachCallback = callback;
-
-    if (optionalThisObject) {
-        forEachCallback = callback.bind(optionalThisObject);
+    //if optionalThis is present
+    if (optionalThis) {
+        forEachCallback = callback.bind(optionalThis);
     }
-    for (var i = 0; i < array.length; i++) {
+    for (let i = 0; i < length; i++) {
         forEachCallback(array[i], i, array );
     }
 }
@@ -38,7 +39,7 @@ function forEach (array, callback, optionalThisObject) {
 
 tests ({
     'It should run the callback function array.length times': function () {
-    var numberOfTimesCallbackHasRun = 0;
+    let numberOfTimesCallbackHasRun = 0;
     forEach([1,2,3], function () {
         numberOfTimesCallbackHasRun++;
     });
@@ -56,7 +57,7 @@ tests ({
     });
     },
     'It should pass in the original Array as the third argument to the callback': function () {
-    var testArray = [1,2,3];
+    const testArray = [1,2,3];
     forEach(testArray, function (number, index, originalArray) {
     eq(originalArray, testArray);
     });

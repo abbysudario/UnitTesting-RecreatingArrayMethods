@@ -1,58 +1,44 @@
 <script src="../simpletest.js"></script>
 <script>
 
+//Prototype Implementation:
+  //function map(array, callback, optionalThis) {
+  //   for (let i = 0; array.length; i++){
+  //     callback(array[i]);
+  //   }
+  // }
+
+//Function signature:
+  //arr.map(function callback( currentValue[, index[, array]]) {
+    // return element for new_array
+  //}[, thisArg])
+
+//Callback parameters:
+  //currentValue
+  //index is optional
+  //array is optional
+ 
+//Return Value: 
+  //A new array with each element being the result of the callback function.
+
+//Description: 
+  //map calls a provided callback function once for each element in an array, in order, and constructs a new array from the results. callback is invoked only for indexes of the array which have assigned values (including undefined).
 
 
-//Example 1: Callback should run 3 times.
-//map([1,2,3], function () {
+function map (array, callback, optionalThis) {
+  const length = array.length;
+  let mapCallback = callback;
 
-//});
-
-// Example 2: Callback has access to the ith element.
-// map([1,2,3], function (number) {
-//     console.log(number);
-// });
-
-// Example 3: Callback has access to index.
-// map([1,2,3], function (number, index) {
-//     console.log(index);
-// });
-
-// Example 4: Callback has access to the originalArray.
-// map([1,2,3], function (number, index, originalArray) {
-//     console.log(originalArray);
-// });
-
-// Example 5: Optional this.
-// map([1, 2, 3], function(number, index, originalArray) { 
-//   console.log(originalArray);
-// });
-
-// Example 6:
-//var originalArray = [1,2,3];
-//var mappedArray = filter(originalArray, function () {});
-//originalArray !== mappedArray
-
-// Example 7: 
-//var originalArray = [1,2,3];
-//var mappedArray = filter(originalArray, function (element) {
-//    return element * 2
-//});
-//Expect mappedArray to be [2,3]
-
-
-function map (originalArray, callback, optionalThis) {
-  var mapCallback = callback;
-
+  //if optionalThis Argument is present
   if (optionalThis) {
     mapCallback = callback.bind(optionalThis)
   }
 
-  var mappedArray = [];
+  let mappedArray = [];
   
-  for (var i = 0; i < originalArray.length; i++) {
-    if (i in originalArray) {
-      mappedArray[i] = mapCallback(originalArray[i], i, originalArray);
+  for (let i = 0; i < length; i++) {
+    if (i in array) {
+      mappedArray[i] = mapCallback(array[i], i, array);
     }
     
   }
@@ -62,7 +48,7 @@ function map (originalArray, callback, optionalThis) {
 
 tests ({
     'It should run the callback function array.length times.': function () {
-        var numberOfTimesCallbackHasRun = 0;
+        let numberOfTimesCallbackHasRun = 0;
         map([1,2,3], function () {
             numberOfTimesCallbackHasRun++;
         });
@@ -82,7 +68,7 @@ tests ({
          
     },
      'It should pass in the original Array as the third argument to the callback.': function () {
-        var testArray = [1,2,3];
+        const testArray = [1,2,3];
         map(testArray, function (number, index, originalArray) {
         eq(originalArray, testArray);
         });
@@ -96,28 +82,28 @@ tests ({
     },
 
      'It should return an array.': function () {
-        var mappedArray = map([], function () {});
+        let mappedArray = map([], function () {});
         eq(Array.isArray(mappedArray), true);
           
     },
 
      'It should return a new array, not the originalArray.': function () {
-        var originalArray = [];
-        var mappedArray = map(originalArray, function () {});
+        const originalArray = [];
+        const mappedArray = map(originalArray, function () {});
         eq(mappedArray !== originalArray, true);
       
         
     },
      'It should return a mapped array.': function () {
-          var mappedArray = map([1], function (number) {
+          let mappedArray = map([1], function (number) {
             return number * 4;
           })
           eq(mappedArray[0], 4);
      
     },
     'It should skip unassigned indexes.': function () {
-      var weirdArray = [, 1];
-      var mappedArray = map(weirdArray, function double(number) {
+      const weirdArray = [, 1];
+      let mappedArray = map(weirdArray, function double(number) {
         return number * 2;
       });
       eq(0 in mappedArray, false);
