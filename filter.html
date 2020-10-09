@@ -25,7 +25,7 @@
 
 
 function filter (array, callback, optionalThis) {
-    const arrayLength = array.length;
+    const length = array.length;
     let filterCallback = callback;
     
     //if optionalThis Argument is present
@@ -35,7 +35,7 @@ function filter (array, callback, optionalThis) {
 
     let filteredArray = [];
 
-    for (var i = 0; i < arrayLength; i++) {
+    for (let i = 0; i < length; i++) {
         if(filterCallback(array[i], i, array)) {
             filteredArray.push(array[i]);
         }

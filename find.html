@@ -25,14 +25,14 @@
 
 
 function find(array, callback, optionalThis) {
-    const arrayLength = array.length;
+    const length = array.length;
     let findCallback = callback;
 
     //if optionalThis Argument is present
     if (optionalThis) {
         findCallback = callback.bind(optionalThis);
     }
-    for (var i = 0; i < arrayLength; i++ ){
+    for (let i = 0; i < length; i++ ){
         if(findCallback(array[i], i, array)){
             return array[i];
         }  
